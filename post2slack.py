@@ -5,6 +5,9 @@ import json
 import os
 import logging
 
+
+
+
 class SlackClient:
 
     token = ""
@@ -34,7 +37,7 @@ class SlackClient:
         return  True
 
     def get_channel_message(channelId):
-        
+
         return True
 
 
