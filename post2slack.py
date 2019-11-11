@@ -36,7 +36,26 @@ class SlackClient:
 
         return  True
 
-    def get_channel_message(channelId):
+
+    def generate_payload(self, channelId, type):
+        payload = {
+            "token" : self.token,
+            "channels" : channelId,
+        }
+
+        return payload
+
+
+    def get_channel_message(self, channelId):
+        payload = {
+            "token" : self.token,
+            "channel" : channelId,
+            "count" : 100
+        }
+
+        resp = requests.get("https://slack.com/api/channels.history", params=payload)
+
+        print(resp.text)
 
         return True
 
@@ -53,6 +72,9 @@ class SlackClient:
 
 
 
+
+
+
 if __name__ == '__main__':
 
     settings = {}
@@ -65,4 +87,5 @@ if __name__ == '__main__':
     token = settings["token"]# "xoxb-29094********-***************"
     # bot access token
     sc = SlackClient(token=token)
-    sc.upload2slack("C8J45QS8Y")
+    sc.get_channel_message("C8J45QS8Y")
+    # sc.upload2slack("C8J45QS8Y")
