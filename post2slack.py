@@ -3,7 +3,7 @@
 import requests
 import json
 import os
-to = ""
+
 class SlackClient:
 
     token = ""
@@ -23,6 +23,7 @@ class SlackClient:
             "initial_comment": "test",\
             "text":"test upload", "channels":channelId }
 
+        # data = request.body params = urlに接続
         resp = requests.post("https://slack.com/api/files.upload", data=payload, files=file)
 
         print(resp)
