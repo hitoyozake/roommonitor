@@ -4,7 +4,7 @@ import requests
 import json
 import os
 import logging
-
+import json
 
 
 
@@ -54,6 +54,15 @@ class SlackClient:
 
 
 if __name__ == '__main__':
-    token = "xoxb-29094********-***************"
+
+    settings = {}
+
+    with open("settings.json") as f:
+        settings = json.load(f)
+
+
+
+    token = settings["token"]# "xoxb-29094********-***************"
+    # bot access token
     sc = SlackClient(token=token)
     sc.upload2slack("C8J45QS8Y")
