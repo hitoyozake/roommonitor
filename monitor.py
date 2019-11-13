@@ -2,6 +2,8 @@
 
 import cv2
 import logging
+import post2slack as slack
+import json
 
 
 def get_a_picture():
@@ -36,4 +38,16 @@ def get_a_picture():
     return img
 
 if __name__ == '__main__':
-    get_a_picture()
+    img = get_a_picture()
+
+    client = slack.SlackClient()
+    info = {}
+
+    with open("channels.json") as f:
+        info = json.load(f)
+
+    channelId = info["Workspaces"]["discuss"]["channels"]["general"]["channelId"]
+
+    client.upload2slack(channelId)
+
+    print("done....")
