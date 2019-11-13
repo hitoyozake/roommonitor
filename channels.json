@@ -1,0 +1,11 @@
+{
+    "Workspaces" : {
+       "discuss" : {
+            "channels" : {
+                "general" : {
+                  "channelId" : "C8J45QS8Y"
+                }
+            }
+       }
+    }
+}
