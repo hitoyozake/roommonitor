@@ -40,14 +40,20 @@ def get_a_picture():
 if __name__ == '__main__':
     img = get_a_picture()
 
-    client = slack.SlackClient()
     info = {}
 
     with open("channels.json") as f:
         info = json.load(f)
 
     channelId = info["Workspaces"]["discuss"]["channels"]["general"]["channelId"]
+    settings = {}
 
-    client.upload2slack(channelId)
+    with open("settings.json") as f:
+        settings = json.load(f)
 
+    token = settings["token"]# "xoxb-29094********-***************"
+    client = slack.SlackClient(token)
+
+    r = client.upload2slack(channelId)
+    print(r)
     print("done....")
