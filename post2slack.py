@@ -7,6 +7,51 @@ import logging
 import json
 
 
+class CommandParser:
+    def __init__():
+        pass
+
+    def parse_options(command, options):
+        # お万度ごとに分岐．できればコマンドごとにクラスがあってポリモーフィズムで処理するのが適切
+
+        pass
+
+
+    def parse_command(self, command):
+
+        if command == "pictpost":
+            return (True, "pict", "take a picture and post")
+
+        # parse失敗
+        return (False, "", "Can't Parse command")
+
+
+    def parse_token(self, tokens):
+        # command [--option...] [args...]
+
+        if len(tokens) < 1:
+            return None
+
+        suceeded, command, msg = self.parse_command(tokens[0])
+
+        if succeeded:
+            return command, msg
+
+        return None
+
+
+    def parse_rawstring(self, message):
+
+        tokens = message.split(" ")
+
+        r = self.parse_token(tokens)
+
+        if r is not None:
+            command, msg = r[0], r[1]
+
+
+
+
 
 class SlackClient:
 
@@ -81,8 +126,6 @@ if __name__ == '__main__':
 
     with open("settings.json") as f:
         settings = json.load(f)
-
-
 
     token = settings["token"]# "xoxb-29094********-***************"
     # bot access token
