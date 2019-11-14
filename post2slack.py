@@ -39,8 +39,8 @@ class CommandParser:
 
         suceeded, command, msg = self.parse_command(tokens[0])
 
-        if succeeded:
-            return command, msg
+        if succeeded is False:
+            return None
 
         options = []
         args = []
@@ -54,7 +54,7 @@ class CommandParser:
                 args = tokens[start+index:]
                 break
 
-        output = {"options": options, "args": args}
+        output = {"command": command, "options": options, "args": args}
         logging.info("parse_token result: {0} => {1}".format(tokens, output))
 
         return output
@@ -70,6 +70,8 @@ class CommandParser:
             command, msg = r[0], r[1]
 
         logging.info("parse_rawstring command is : {0}".format(command))
+
+        self.parse_token(tokens)
 
 
 
