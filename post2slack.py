@@ -5,15 +5,19 @@ import json
 import os
 import logging
 import json
+import re
 
 
 class CommandParser:
     def __init__():
         pass
 
+
+    def validate_command(command, options, args):
+        pass
+
     def parse_options(command, options):
         # お万度ごとに分岐．できればコマンドごとにクラスがあってポリモーフィズムで処理するのが適切
-
         pass
 
 
@@ -29,6 +33,8 @@ class CommandParser:
     def parse_token(self, tokens):
         # command [--option...] [args...]
 
+        itemlist = []
+
         if len(tokens) < 1:
             return None
 
@@ -37,7 +43,19 @@ class CommandParser:
         if succeeded:
             return command, msg
 
-        return None
+        options = []
+        args = []
+
+        # 2個目の引数からはoptions or args. optionでなければそれ以降は全部args
+        start = 1
+        for index, token in enumurate(tokens[start:]):
+            if re.search("^--", token):
+                options.append(token)
+            else:
+                args = tokens[start+index:]
+                break
+
+        return {"options": options, "args": args}
 
 
     def parse_rawstring(self, message):
