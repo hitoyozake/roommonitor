@@ -32,7 +32,6 @@ class CommandParser:
 
     def parse_token(self, tokens):
         # command [--option...] [args...]
-
         itemlist = []
 
         if len(tokens) < 1:
@@ -55,7 +54,10 @@ class CommandParser:
                 args = tokens[start+index:]
                 break
 
-        return {"options": options, "args": args}
+        output = {"options": options, "args": args}
+        logging.info("parse_token result: {0} => {1}".format(tokens, output))
+
+        return output
 
 
     def parse_rawstring(self, message):
@@ -67,6 +69,7 @@ class CommandParser:
         if r is not None:
             command, msg = r[0], r[1]
 
+        logging.info("parse_rawstring command is : {0}".format(command))
 
 
 
