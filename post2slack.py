@@ -30,6 +30,13 @@ class CommandParser:
         return (False, "", "Can't Parse command")
 
 
+    def execute_command(self, command, args, options):
+
+
+
+        return True
+
+
     def parse_token(self, tokens):
         # command [--option...] [args...]
         itemlist = []
