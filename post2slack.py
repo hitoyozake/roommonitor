@@ -9,7 +9,7 @@ import re
 
 
 class CommandParser:
-    def __init__():
+    def __init__(self):
         pass
 
 
@@ -24,7 +24,7 @@ class CommandParser:
     def parse_command(self, command):
 
         if command == "pictpost":
-            return (True, "pict", "take a picture and post")
+            return (True, "pictpost", "take a picture and post")
 
         # parse失敗
         return (False, "", "Can't Parse command")
@@ -44,7 +44,7 @@ class CommandParser:
         if len(tokens) < 1:
             return None
 
-        suceeded, command, msg = self.parse_command(tokens[0])
+        succeeded, command, msg = self.parse_command(tokens[0])
 
         if succeeded is False:
             return None
@@ -54,7 +54,7 @@ class CommandParser:
 
         # 2個目の引数からはoptions or args. optionでなければそれ以降は全部args
         start = 1
-        for index, token in enumurate(tokens[start:]):
+        for index, token in enumerate(tokens[start:]):
             if re.search("^--", token):
                 options.append(token)
             else:
@@ -71,14 +71,8 @@ class CommandParser:
 
         tokens = message.split(" ")
 
-        r = self.parse_token(tokens)
 
-        if r is not None:
-            command, msg = r[0], r[1]
-
-        logging.info("parse_rawstring command is : {0}".format(command))
-
-        self.parse_token(tokens)
+        return self.parse_token(tokens)
 
 
 

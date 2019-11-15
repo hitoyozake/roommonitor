@@ -8,8 +8,8 @@ class TestCase(unittest.TestCase):
 
     def test_commands(self):
         cmdParser = post2slack.CommandParser()
-        answer = {"command":"pict", "args":[], "options": ["--a", "--b"]}
-        self.assertEqual( answer, cmdParser.parse_token("pict --a --b"))
+        answer = {"command":"pictpost", "args":[], "options": ["--a", "--b"]}
+        self.assertEqual( answer, cmdParser.parse_rawstring("pictpost --a --b"))
         pass
 
 
