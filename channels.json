@@ -1,11 +1,12 @@
 {
-    "Workspaces" : {
-       "discuss" : {
-            "channels" : {
-                "general" : {
-                  "channelId" : "C8J45QS8Y"
-                }
-            }
-       }
+  "Workspaces": {
+    "discuss": {
+      "channels": {
+        "general": {
+          "channelId": "C8J45QS8Y",
+          "lastTimeStamp": "1573975706.000400"
+        }
+      }
     }
+  }
 }

@@ -115,7 +115,7 @@ class SlackClient:
         return payload
 
 
-    def get_channel_message(self, channelId):
+    def get_channel_message(self, channelId, onlyDiff=True):
         payload = {
             "token" : self.token,
             "channel" : channelId,
@@ -123,10 +123,35 @@ class SlackClient:
         }
 
         resp = requests.get("https://slack.com/api/channels.history", params=payload)
+        tj = None
+        lastTimeStamp = 0.0
+        with open("channels.json") as f:
+            tmpjson = json.load(f)
+            tj = tmpjson
+            if "lastTimeStamp" in tmpjson["Workspaces"]["discuss"]["channels"]["general"]:
+                lastTimeStamp = float(tmpjson["Workspaces"]["discuss"]["channels"]["general"]["lastTimeStamp"])
 
-        print(resp.text)
 
-        return True
+        messages = []
+        respjson = resp.json()
+        print(lastTimeStamp)
+        if "messages" in respjson:
+            for i in respjson["messages"]:
+                if lastTimeStamp < float(i["ts"]):
+                    messages.append(i)
+
+        respjson["messages"] = messages
+
+        if len(messages) > 0:
+            lastTimeStamp = messages[0]["ts"]
+
+            with open("channels.json", "w") as f:
+                if tj is not None:
+                    tmpjson = tj
+                    tmpjson["Workspaces"]["discuss"]["channels"]["general"]["lastTimeStamp"] = lastTimeStamp
+                    json.dump(tmpjson, f, ensure_ascii=False, indent=2, sort_keys=True, separators=(',', ': '))
+
+        return respjson
 
 
 
@@ -141,9 +166,6 @@ class SlackClient:
 
 
 
-
-
-
 if __name__ == '__main__':
 
     settings = {}
@@ -154,5 +176,6 @@ if __name__ == '__main__':
     token = settings["token"]# "xoxb-29094********-***************"
     # bot access token
     sc = SlackClient(token=token)
-    sc.get_channel_message("C8J45QS8Y")
+    rsp = sc.get_channel_message("C8J45QS8Y")
+    print(rsp)
     # sc.upload2slack("C8J45QS8Y")
