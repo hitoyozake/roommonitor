@@ -81,10 +81,13 @@ class SlackClient:
 
     token = ""
     url = ""
+    channels = {}
 
     def __init__(self, token=""):
         self.token=token
-        pass
+
+        with open("channels.json") as f:
+            self.channels = json.load(f)
 
     """
     """
@@ -113,6 +116,18 @@ class SlackClient:
         }
 
         return payload
+
+
+    """
+        channel_id_を返す workspace, channel-nameが必要
+    """
+    def get_channel_id_by_name(self, workspace, name):
+        for ws in self.channels["workspace"]:
+            if workspace in ws:
+                if name in ws["channels"]:
+                    return ws["channels"][name]["channelId"]
+
+        return None
 
 
     def get_channel_message(self, channelId, onlyDiff=True):
