@@ -81,13 +81,13 @@ class SlackClient:
 
     token = ""
     url = ""
-    channels = {}
+    workspaces = {}
 
     def __init__(self, token=""):
         self.token=token
 
         with open("channels.json") as f:
-            self.channels = json.load(f)
+            self.workspaces = json.load(f)
 
     """
     """
@@ -140,11 +140,13 @@ class SlackClient:
         resp = requests.get("https://slack.com/api/channels.history", params=payload)
         tj = None
         lastTimeStamp = 0.0
-        with open("channels.json") as f:
-            tmpjson = json.load(f)
-            tj = tmpjson
-            if "lastTimeStamp" in tmpjson["Workspaces"]["discuss"]["channels"]["general"]:
-                lastTimeStamp = float(tmpjson["Workspaces"]["discuss"]["channels"]["general"]["lastTimeStamp"])
+
+
+
+        tmpjson = self.workspaces
+        tj = tmpjson
+        if "lastTimeStamp" in tmpjson["Workspaces"]["discuss"]["channels"]["general"]:
+            lastTimeStamp = float(tmpjson["Workspaces"]["discuss"]["channels"]["general"]["lastTimeStamp"])
 
 
         messages = []
@@ -152,8 +154,9 @@ class SlackClient:
         print(lastTimeStamp)
         if "messages" in respjson:
             for i in respjson["messages"]:
-                if lastTimeStamp < float(i["ts"]):
-                    messages.append(i)
+                if lastTimeStamp < float(i["ts"]) or onlyDiff is False:
+                   messages.append(i)
+
 
         respjson["messages"] = messages
 
@@ -163,6 +166,7 @@ class SlackClient:
             with open("channels.json", "w") as f:
                 if tj is not None:
                     tmpjson = tj
+                    self.workspaces = tj
                     tmpjson["Workspaces"]["discuss"]["channels"]["general"]["lastTimeStamp"] = lastTimeStamp
                     json.dump(tmpjson, f, ensure_ascii=False, indent=2, sort_keys=True, separators=(',', ': '))
 
@@ -191,6 +195,14 @@ if __name__ == '__main__':
     token = settings["token"]# "xoxb-29094********-***************"
     # bot access token
     sc = SlackClient(token=token)
-    rsp = sc.get_channel_message("C8J45QS8Y")
-    print(rsp)
+    rsp = sc.get_channel_message("C8J45QS8Y", False)
+
+    parser = CommandParser()
+
+    for msgs in rsp["messages"]:
+        if msgs["type"] == "message":
+            rawstring = msgs["text"]
+            r = parser.parse_rawstring(rawstring)
+            print("text: {0}, parse result: {1}".format(rawstring, r))
+
     # sc.upload2slack("C8J45QS8Y")
