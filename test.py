@@ -13,6 +13,14 @@ class TestCase(unittest.TestCase):
         pass
 
 
+    def test_get_channnelid(self):
+        chid = "C8J45QS8Y"
+        client = post2slack.SlackClient(token=chid)
+
+        self.assertNotEqual(client.get_channel_id_by_name("discuss", "general"), None)
+        self.assertNotEqual(client.get_channel_message(chid), None)
+
+
 
 if __name__ == '__main__':
     utest = TestCase()

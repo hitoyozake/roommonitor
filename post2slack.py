@@ -122,10 +122,10 @@ class SlackClient:
         channel_id_を返す workspace, channel-nameが必要
     """
     def get_channel_id_by_name(self, workspace, name):
-        for ws in self.channels["workspace"]:
-            if workspace in ws:
-                if name in ws["channels"]:
-                    return ws["channels"][name]["channelId"]
+        for ws, v in self.channels["Workspaces"].items():
+            if workspace == ws:
+                if name in v["channels"]:
+                    return v["channels"][name]["channelId"]
 
         return None
 
