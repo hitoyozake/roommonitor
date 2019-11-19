@@ -6,7 +6,7 @@ import post2slack as slack
 import json
 
 
-def get_a_picture():
+def take_a_picture():
     img = None
     mirror = False
     tmpFilename = "tmpOutput.png"
@@ -38,9 +38,10 @@ def get_a_picture():
     return img
 
 if __name__ == '__main__':
-    img = get_a_picture()
 
     info = {}
+
+    commandParser = slack.CommandParser()
 
     with open("channels.json") as f:
         info = json.load(f)
@@ -54,6 +55,26 @@ if __name__ == '__main__':
     token = settings["token"]# "xoxb-29094********-***************"
     client = slack.SlackClient(token)
 
-    r = client.upload2slack(channelId)
-    print(r)
+    response = client.get_channel_message("C8J45QS8Y", False)
+
+    parser = slack.CommandParser()
+
+    for msgs in response["messages"]:
+        if msgs["type"] == "message":
+            rawstring = msgs["text"]
+            r = parser.parse_rawstring(rawstring)
+            print("text: {0}, parse result: {1}".format(rawstring, r))
+
+            if r is not None and r["command"] == "pictpost":
+                img = take_a_picture()
+
+                if img is not None:
+                    param = [int(cv2.IMWRITE_JPEG_QUALITY), 6]
+                    result, jpg = cv2.imencode(".jpg", img, param)
+                    print(result)
+                    print(channelId)
+                    r = client.upload2slack(channelId, file=jpg)
+                    print(r)
+
+
     print("done....")

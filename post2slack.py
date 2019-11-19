@@ -6,6 +6,7 @@ import os
 import logging
 import json
 import re
+import io
 
 
 class CommandParser:
@@ -91,20 +92,28 @@ class SlackClient:
 
     """
     """
-    def upload2slack(self, channelId):
-        abspath=os.path.abspath("./tmpOutput.png")
-        file = {"file":open(abspath, "rb")}
-        logging.info("file detail: {0}".format(abspath))
+    def upload2slack(self, channelId, file):
+        # abspath=os.path.abspath("./tmpOutput.png")
+        # file = {"file":open(abspath, "rb")}
+        # logging.info("file detail: {0}".format(abspath))
+
+        filebin = io.BytesIO(file)
         payload = {"token": self.token, "title":"test",\
             "filename":"tmpOutput.png",\
             "initial_comment": "test",\
             "text":"test upload", "channels":channelId }
 
+
+        # file = {"file":}
+
+        file = {"file": filebin}
+
+
         # data = request.body params = urlに接続
-        try:
-            resp = requests.post("https://slack.com/api/files.upload", data=payload, files=file)
-        except:
-            return False
+        # try:
+        resp = requests.post("https://slack.com/api/files.upload", data=payload, files=file)
+        # except:
+        #     return False
 
         return  True
 
